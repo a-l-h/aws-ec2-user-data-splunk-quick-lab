@@ -46,7 +46,7 @@ sudo touch /opt/splunk/etc/.ui_login
 
 # Start Splunk and set a new password (8 characters minimum)
 
-sudo /opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd superadmin
+sudo /opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd <password>
 
 # Configure Splunk to start at boot time
 
