@@ -16,13 +16,13 @@ Follow these instructions to use the script.
 
 To use this script as "User Data" to launch an EC2 instance, please consider these prerequisites:
 
-- Provide the name of your S3 bucket:
+## Provide the name of your S3 bucket:
 
 ```
 sudo aws s3 cp s3://<s3_bucket_name>/ ./ --recursive
 ```
 
-- Make sure your EC2 instance will be able to download content from your S3 bucket:
+## Make sure your EC2 instance will be able to download content from your S3 bucket:
 
 Either you can make your bucket public, or you can keep the bucket private and configure an IAM role that will grant S3 access from the EC2 instance.
 
@@ -30,4 +30,4 @@ If you choose the latter, you can simply attach the predefined policy named "Ama
 
 Then you will have to pick the created role when configuring instance details for your EC2 instance.
 
-- Make sure your EC2 instance is reachable on TCP ports 80 & 22 when configuring the security group for the EC2 instance.
+## Make sure your EC2 instance is reachable on TCP ports 80 & 22 when configuring the security group for the EC2 instance.
