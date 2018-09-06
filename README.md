@@ -1,4 +1,4 @@
-# AWS User Data to launch with EC2 Instance for a Splunk quick Lab install
+## AWS User Data to launch with EC2 Instance for a Splunk quick Lab install
 
 This is a simple shell script to use as "User Data" when launching an AWS EC2 instance serving as a Splunk quick Lab.
 
@@ -7,10 +7,6 @@ It will install Splunk and perform a few configuration steps so that Splunk is a
 It will also retrieve Splunk Apps and Add-ons from a provided S3 bucket and install them in the dedicated Splunk directory.
 
 The goal is to set up a throwable Splunk instance for Lab purposes without any dialog box to interfere.
-
-## Getting Started
-
-Follow these instructions to use the script.
 
 ### Prerequisites
 
