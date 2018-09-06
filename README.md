@@ -20,6 +20,14 @@ Edit this line of the script:
 sudo aws s3 cp s3://<s3_bucket_name>/ ./ --recursive
 ```
 
+#### Define a password for Splunk
+
+Edit this line of the script:
+
+```
+sudo /opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd <password>
+```
+
 Upload custom or downloaded Apps and Add-ons as tgz files to your S3 bucket.
 
 #### Make sure your EC2 instance can download content from your S3 bucket
