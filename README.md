@@ -4,7 +4,7 @@ This is a simple shell script to use as "User Data" when launching an AWS EC2 in
 
 It will install Splunk and perform a few configuration steps so that Splunk is accessible straight away without any of the actions usually required with a fresh install.
 
-It will also retrieve Splunk Apps and Add-ons from a provided S3 bucket and install them.
+It will also retrieve Splunk Apps and Add-ons from a provided S3 bucket and install them in the dedicated Splunk directory.
 
 The goal is to set up a throwable Splunk instance for Lab purposes without any dialog box to interfere.
 
@@ -14,20 +14,26 @@ Follow these instructions to use the script.
 
 ### Prerequisites
 
-To use this script as "User Data" to launch an EC2 instance, please consider these prerequisites:
+To use this script as "User Data" with an EC2 instance, please consider the prerequisites below.
 
-#### Provide the name of your S3 bucket:
+#### Provide the name of your S3 bucket
+
+Edit this line of the script:
 
 ```
 sudo aws s3 cp s3://<s3_bucket_name>/ ./ --recursive
 ```
 
-#### Make sure your EC2 instance will be able to download content from your S3 bucket:
+Upload custom or downloaded Apps and Add-ons as tgz files to your S3 bucket.
+
+#### Make sure your EC2 instance can download content from your S3 bucket
 
 Either you can make your bucket public, or you can keep the bucket private and configure an IAM role that will grant S3 access from the EC2 instance.
 
 If you choose the latter, you can simply attach the predefined policy named "AmazonS3FullAccess" to the created role.
 
-Then you will have to pick the created role when configuring instance details for your EC2 instance.
+Then, assign the created role to your EC2 instance.
 
-#### Make sure your EC2 instance is reachable on TCP ports 80 & 22 when configuring the security group for the EC2 instance.
+#### Make sure your EC2 instance is reachable
+
+Configure and assign a security group that will allow access to your EC2 instance on TCP ports 80 & 22.
