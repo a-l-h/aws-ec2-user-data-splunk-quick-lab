@@ -2,15 +2,15 @@
 
 # Download the latest Splunk version
 
-wget -O splunk-latest-linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=latest&product=splunk&filename=splunk-7.1.2-a0c72a66db66-Linux-x86_64.tgz&wget=true'
+wget -O splunk-7.1.3-51d9cac7b837-Linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.1.3&product=splunk&filename=splunk-7.1.3-51d9cac7b837-Linux-x86_64.tgz&wget=true'
 
 # Untar Splunk tgz file in /opt
 
-sudo tar xvzf splunk-latest-linux-x86_64.tgz -C /opt
+sudo tar xvzf splunk-7.1.3-51d9cac7b837-Linux-x86_64.tgz -C /opt
 
 # Delete Splunk tgz file
 
-sudo rm -rf splunk-latest-linux-x86_64.tgz
+sudo rm -rf splunk-7.1.3-51d9cac7b837-Linux-x86_64.tgz
 
 # Download content from S3 bucket
 
