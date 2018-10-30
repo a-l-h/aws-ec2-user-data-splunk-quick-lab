@@ -20,10 +20,12 @@ sudo aws s3 cp s3://<s3_bucket_name>/ ./ --recursive
 
 cat *.tgz | sudo tar xvzf - -i -C /opt/splunk/etc/apps
 
-# Customize bash prompt
+# Customize bash prompt with color, shortcut for $SPLUNK_HOME/bin directory, and auto-completion script
 
-echo 'export PATH=$PATH:/opt/splunk/bin' >> ~/.bashrc
 echo 'export PS1="\e[0;32m[\u@\h \W]\$ \e[m"' >> ~/.bashrc
+echo 'export SPLUNK_HOME=/opt/splunk' >> ~/.bashrc
+echo 'export PATH=$PATH:$SPLUNK_HOME/bin' >> ~/.bashrc
+echo '. $SPLUNK_HOME/share/splunk/cli-command-completion.sh'  >> ~/.bashrc
 
 source ~/.bashrc
 
