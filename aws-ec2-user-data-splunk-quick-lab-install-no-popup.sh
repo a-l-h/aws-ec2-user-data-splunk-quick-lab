@@ -52,7 +52,7 @@ sudo /opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt --se
 
 # Configure Splunk to start at boot time
 
-sudo /opt/splunk/bin/splunk enable boot-start --accept-license
+sudo /opt/splunk/bin/splunk enable boot-start
 
 # Update the system
 
