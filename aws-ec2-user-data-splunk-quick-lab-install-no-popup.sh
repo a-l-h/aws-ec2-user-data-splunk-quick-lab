@@ -42,11 +42,16 @@ echo 'render_version_messages = 0' | sudo tee --append /opt/splunk/etc/system/lo
 echo 'dismissedInstrumentationOptInVersion = 3'  | sudo tee --append /opt/splunk/etc/system/local/user-prefs.conf
 echo 'hideInstrumentationOptInModal = 1' | sudo tee --append /opt/splunk/etc/system/local/user-prefs.conf
 
+# Configure password policy to allow a password shorter than the default minimum of 8 characters
+
+echo '[splunk_auth]' | sudo tee /opt/splunk/etc/system/local/authentication.conf
+echo 'minPasswordLength = 1' | sudo tee --append /opt/splunk/etc/system/local/authentication.conf
+
 # Fake a previous login to prevent Splunk from requesting password change
 
 sudo touch /opt/splunk/etc/.ui_login
 
-# Start Splunk and set a new password (8 characters minimum)
+# Start Splunk and set a new password
 
 sudo /opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd <password>
 
