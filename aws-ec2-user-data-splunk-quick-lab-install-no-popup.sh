@@ -59,7 +59,7 @@ echo "4/18 Configured global bash prompt"
 
 # Download Splunk Apps and Add-ons from S3 bucket
 
-aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz"  --include "*.tar.gz" --include "*.spl" || true
+aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz"  --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
 
 echo "5/18 Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
 
@@ -71,7 +71,7 @@ echo "6/18 Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
 
 # Delete retrieved Apps and Add-ons
 
-rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl
+rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
 
 echo "7/18 Removed Apps & Add-ons from source directory"
 
