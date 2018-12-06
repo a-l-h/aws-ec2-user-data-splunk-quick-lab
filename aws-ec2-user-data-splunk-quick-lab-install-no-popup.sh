@@ -32,19 +32,19 @@ export SPLUNK_HOME="/opt/splunk"
 
 wget --quiet --output-document splunk-latest-linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=latest&product=splunk&filename=.tgz&wget=true'
 
-echo "Downloaded latest Splunk build"
+echo "1/18 Downloaded latest Splunk build"
 
 # Unpack Splunk tgz file in /opt
 
 tar --extract --gzip --file splunk-latest-linux-x86_64.tgz --directory /opt
 
-echo "Extracted Splunk to /opt/"
+echo "2/18 Extracted Splunk to /opt/"
 
 # Delete Splunk tgz file
 
 rm --recursive --force splunk-latest-linux-x86_64.tgz
 
-echo "Removed Splunk installation source"
+echo "3/18 Removed Splunk installation source"
 
 # Customize global bash prompt with color, shortcut for $SPLUNK_HOME/bin directory, and auto-completion script so it can be used by both root and ec2-user users
 
@@ -55,25 +55,25 @@ echo "Removed Splunk installation source"
   echo ". $SPLUNK_HOME/share/splunk/cli-command-completion.sh"
 } >> /etc/bashrc
 
-echo "Configured global bash prompt"
+echo "4/18 Configured global bash prompt"
 
 # Download Splunk Apps and Add-ons from S3 bucket
 
 aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz"  --include "*.tar.gz" --include "*.spl" || true
 
-echo "Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
+echo "5/18 Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
 
 # Unpack downloaded tgz files in /etc/apps
 
 cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
 
-echo "Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
+echo "6/18 Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
 
 # Delete retrieved Apps and Add-ons
 
 rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl
 
-echo "Removed Apps & Add-ons from source directory"
+echo "7/18 Removed Apps & Add-ons from source directory"
 
 # Create directories for the 'user_data_no_popup_app' that will be configured through the script 
 
@@ -101,7 +101,7 @@ mkdir --parents "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local "${SPLUNK
   echo "BREAK_ONLY_BEFORE = Cloud-init"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/props.conf
 
-echo "Configured monitoring for User Data logs"
+echo "8/18 Configured monitoring for User Data logs"
 
 # Prevent Splunk Web from checking for newer versions
 
@@ -140,46 +140,46 @@ echo "Configured monitoring for User Data logs"
   echo "viewed = 1"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/ui-tour.conf
 
-echo "Set some configurations to avoid popups"
+echo "9/18 Set some configurations to avoid popups"
 
 # Redirect Splunk Web port 8000 to port 80 to reach it only with IP address through Web browser
 
 iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8000
 
-echo "Redirected port 8000 to port 80"
+echo "10/18 Redirected port 8000 to port 80"
 
 # Fake a previous login to prevent Splunk from requesting password change
 
 touch "${SPLUNK_HOME}"/etc/.ui_login
 
-echo "Faked a previous UI login"
+echo "11/18 Faked a previous UI login"
 
 # Set Splunk to start the service as the user 'ec2-user' 
 
 echo "SPLUNK_OS_USER=ec2-user" >> "${SPLUNK_HOME}"/etc/splunk-launch.conf
 
-echo "Set ec2-user as the user to start the Splunk service with"
+echo "12/18 Set ec2-user as the user to start the Splunk service with"
 
 # Change the ownership of the Splunk directory to the ec2-user
 
 chown -R ec2-user:ec2-user "${SPLUNK_HOME}"
 
-echo "Changed ${SPLUNK_HOME} ownership to ec2-user"
+echo "13/18 Changed ${SPLUNK_HOME} ownership to ec2-user"
 
 # Start Splunk, accept license and set a admin password
 
 sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd ${password}'
 
-echo "Set Splunk admin password"
+echo "14/18 Set Splunk admin password"
 
-echo "Accepted Splunk license"
+echo "15/18 Accepted Splunk license"
 
-echo "Started Splunk"
+echo "16/18 Started Splunk"
 
 # Configure Splunk to start at boot time
 
 "${SPLUNK_HOME}"/bin/splunk enable boot-start -user ec2-user
 
-echo "Configured Splunk to start at boot time"
+echo "17/18 Configured Splunk to start at boot time"
 
-echo "Done"
+echo "18/18 Done"
