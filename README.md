@@ -50,6 +50,6 @@ The output of the User Data script is written in /var/log/cloud-init-output.log.
 
 The script configures Splunk to monitor this log file and index it in the '_internal' index under the 'aws:cloud-init' sourcetype so that data could be explored from Splunk.
 
-## Splunk is run with ec2-user
+### Splunk is run with ec2-user
 
 This could be important to know while accessing the instance via ssh.
