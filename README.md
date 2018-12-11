@@ -30,7 +30,7 @@ Edit this line of the script:
 export password="<password>"
 ```
 
-Upload custom or downloaded Apps and Add-ons as tgz|tar.gz|spl files to your S3 bucket.
+Upload custom or downloaded Apps and Add-ons as tgz|tar.gz|spl|zip files to your S3 bucket.
 
 #### Make sure your EC2 instance can download content from your S3 bucket
 
