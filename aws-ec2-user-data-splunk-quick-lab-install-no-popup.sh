@@ -49,10 +49,10 @@ echo "3/18 Removed Splunk installation source"
 # Customize global bash prompt with color, shortcut for $SPLUNK_HOME/bin directory, and auto-completion script so it can be used by both root and ec2-user users
 
 {
-  echo "export PS1=\"\e[0;32m[\u@\h \W]\$ \e[m\""
-  echo "export SPLUNK_HOME=/opt/splunk"
-  echo "export PATH=$PATH:$SPLUNK_HOME/bin"
-  echo ". $SPLUNK_HOME/share/splunk/cli-command-completion.sh"
+  echo "export PS1='\[\033[1;32m\]\$(whoami)@\$(hostname): \[\033[0;37m\]\$(pwd)\$ \[\033[0m\]'"
+  echo "export SPLUNK_HOME=\"/opt/splunk\""
+  echo "export PATH=\${SPLUNK_HOME}/bin:\${PATH}"
+  echo ". \${SPLUNK_HOME}/share/splunk/cli-command-completion.sh"
 } >> /etc/bashrc
 
 echo "4/18 Configured global bash prompt"
@@ -182,4 +182,8 @@ echo "16/18 Started Splunk"
 
 echo "17/18 Configured Splunk to start at boot time"
 
-echo "18/18 Done"
+# Perform system update
+
+yum update --quiet --assumeyes
+
+echo "18/18 Performed a system update"
