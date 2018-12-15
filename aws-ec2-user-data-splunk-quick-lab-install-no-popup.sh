@@ -19,11 +19,11 @@ set -o pipefail
 # Set the script to exit when it tries to use undeclared variables
 set -o nounset
 
-# Provide the name of the bucket you want to retrieve Splunk Apps and Add-ons from
-readonly s3_bucket="<s3_bucket>"
-
 # Provide the admin password you want to set
 export password="<password>"
+
+# Set $SPLUNK_HOME variable
+export SPLUNK_HOME="/opt/splunk"
 
 # Set $SPLUNK_HOME variable
 export SPLUNK_HOME="/opt/splunk"
@@ -32,19 +32,19 @@ export SPLUNK_HOME="/opt/splunk"
 
 wget --quiet --output-document splunk-latest-linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=latest&product=splunk&filename=.tgz&wget=true'
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 1/18 - Downloaded latest Splunk build"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 1/19 - Downloaded latest Splunk build"
 
 # Unpack Splunk tgz file in /opt
 
 tar --extract --gzip --file splunk-latest-linux-x86_64.tgz --directory /opt
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 2/18 - Extracted Splunk to /opt/"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 2/19 - Extracted Splunk to /opt/"
 
 # Delete Splunk tgz file
 
 rm --recursive --force splunk-latest-linux-x86_64.tgz
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 3/18 - Removed Splunk installation source"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 3/19 - Removed Splunk installation source"
 
 # Customize global bash prompt with color, shortcut for $SPLUNK_HOME/bin directory, and auto-completion script so it can be used by both root and ec2-user users
 
@@ -55,25 +55,25 @@ echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 3/18 - Removed Splunk installation s
   echo ". \${SPLUNK_HOME}/share/splunk/cli-command-completion.sh"
 } >> /etc/bashrc
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 4/18 - Configured global bash prompt"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 4/19 - Configured global bash prompt"
 
 # Download Splunk Apps and Add-ons from S3 bucket
 
 aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz"  --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 5/18 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 5/19 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
 
 # Unpack downloaded tgz files in /etc/apps
 
 cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 6/18 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 6/19 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
 
 # Delete retrieved Apps and Add-ons
 
 rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 7/18 - Removed Apps & Add-ons from source directory"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 7/19 - Removed Apps & Add-ons from source directory"
 
 # Create directories for the 'user_data_no_popup_app' that will be configured through the script 
 
@@ -101,7 +101,7 @@ mkdir --parents "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local "${SPLUNK
   echo "BREAK_ONLY_BEFORE = ^Cloud-init|^[A-Za-z]{3}\,\s\d{1,2}\s[A-Za-z]{3}\s\d{4}\s\d{2}\:\d{2}\:\d{2}"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/props.conf
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 8/18 - Configured monitoring for User Data logs"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 8/19 - Configured monitoring for User Data logs"
 
 # Prevent Splunk Web from checking for newer versions
 
@@ -140,50 +140,58 @@ echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 8/18 - Configured monitoring for Use
   echo "viewed = 1"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/ui-tour.conf
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 9/18 - Set some configurations to avoid popups"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 9/19 - Set some configurations to avoid popups"
 
 # Redirect Splunk Web port 8000 to port 80 to reach it only with IP address through Web browser
 
 iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8000
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 10/18 - Redirected port 8000 to port 80"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 10/19 - Redirected port 8000 to port 80"
 
 # Fake a previous login to prevent Splunk from requesting password change
 
 touch "${SPLUNK_HOME}"/etc/.ui_login
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 11/18 - Faked a previous UI login"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 11/19 - Faked a previous UI login"
 
 # Set Splunk to start the service as the user 'ec2-user' 
 
 echo "SPLUNK_OS_USER=ec2-user" >> "${SPLUNK_HOME}"/etc/splunk-launch.conf
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 12/18 - Set ec2-user as the user to start the Splunk service with"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 12/19 - Set ec2-user as the user to start the Splunk service with"
 
 # Change the ownership of the Splunk directory to the ec2-user
 
 chown -R ec2-user:ec2-user "${SPLUNK_HOME}"
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 13/18 - Changed ${SPLUNK_HOME} ownership to ec2-user"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 13/19 - Changed ${SPLUNK_HOME} ownership to ec2-user"
 
 # Start Splunk, accept license and set a admin password
 
-sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd ${password}'
+sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd "${password}"'
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 14/18 - Set Splunk admin password"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 14/19 - Set Splunk admin password"
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 15/18 - Accepted Splunk license"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 15/19 - Accepted Splunk license"
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 16/18 - Started Splunk"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 16/19 - Started Splunk"
+
+# List installed Apps
+
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - Installed Apps:"
+
+sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk display app -auth admin:"${password}"'
+
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 17/19 - Listed installed Apps"
 
 # Configure Splunk to start at boot time
 
-"${SPLUNK_HOME}"/bin/splunk enable boot-start -user ec2-user
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 18/19 - Configured Splunk to start at boot time"
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 17/18 - Configured Splunk to start at boot time"
+"${SPLUNK_HOME}"/bin/splunk enable boot-start -user ec2-user
 
 # Perform system update
 
 yum --setopt=deltarpm=0 update --quiet --assumeyes
 
-echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 18/18 - Performed a system update"
+echo "$(date '+%a, %d %b %Y %H:%M:%S %z') - 19/19 - Performed a system update"
