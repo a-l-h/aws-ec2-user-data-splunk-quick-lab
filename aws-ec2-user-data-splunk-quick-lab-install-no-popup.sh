@@ -191,10 +191,11 @@ sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk display app -auth admin:"
 echo "${timestamp} - 17/19 - Listed installed Apps"
 
 # Configure Splunk to start at boot time
+# Looking for an handy workaround since this big change: https://docs.splunk.com/Documentation/Splunk/7.2.2/Admin/RunSplunkassystemdservice
 
-echo "${timestamp} - 18/19 - Configured Splunk to start at boot time"
+# echo "${timestamp} - 18/19 - Configured Splunk to start at boot time"
 
-"${SPLUNK_HOME}"/bin/splunk enable boot-start -user ec2-user
+# "${SPLUNK_HOME}"/bin/splunk enable boot-start -user ec2-user
 
 # Perform system update
 
