@@ -19,11 +19,14 @@ set -o pipefail
 # Set the script to exit when it tries to use undeclared variables
 set -o nounset
 
-# Provide the name of the bucket you want to retrieve Splunk Apps and Add-ons from
+# Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket
+readonly retrieve_s3_data="<yes|no>"
+
+# If the retrieve_s3_data is set to "yes", provide the name of the bucket you want to retrieve files from
 readonly s3_bucket="<s3_bucket>"
 
-# Provide the admin password you want to set
-export password="<password>"
+# Provide the Splunk admin password you want to set
+export password="yolo"
 
 # Set $timestamp variable for logging
 timestamp=$(date '+%a, %d %b %Y %H:%M:%S %z')
@@ -38,19 +41,19 @@ export SPLUNK_HOME="/opt/splunk"
 
 wget --quiet --output-document splunk-latest-linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=latest&product=splunk&filename=.tgz&wget=true'
 
-echo "${timestamp} - 1/19 - Downloaded latest Splunk build"
+echo "${timestamp} - 1/17 - Downloaded latest Splunk build"
 
 # Unpack Splunk tgz file in /opt
 
 tar --extract --gzip --file splunk-latest-linux-x86_64.tgz --directory /opt
 
-echo "${timestamp} - 2/19 - Extracted Splunk to /opt/"
+echo "${timestamp} - 2/17 - Extracted Splunk to /opt/"
 
 # Delete Splunk tgz file
 
 rm --recursive --force splunk-latest-linux-x86_64.tgz
 
-echo "${timestamp} - 3/19 - Removed Splunk installation source"
+echo "${timestamp} - 3/17 - Removed Splunk installation source"
 
 # Customize global bash prompt with color, shortcut for $SPLUNK_HOME/bin directory, and auto-completion script so it can be used by both root and ec2-user users
 
@@ -61,25 +64,39 @@ echo "${timestamp} - 3/19 - Removed Splunk installation source"
   echo ". \${SPLUNK_HOME}/share/splunk/cli-command-completion.sh"
 } >> /etc/bashrc
 
-echo "${timestamp} - 4/19 - Configured global bash prompt"
+echo "${timestamp} - 4/17 - Configured global bash prompt"
 
-# Download Splunk Apps and Add-ons from S3 bucket
+# If variable retrieve_s3_data is set to "yes", proceed
 
-aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz" --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
+if [ "$retrieve_s3_data" = "yes" ]; then
 
-echo "${timestamp} - 5/19 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
+   # Download Splunk Apps and Add-ons from S3 bucket
+   
+   aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz" --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
+   
+   echo "${timestamp} - 5/17 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
+   
+   # Unpack downloaded tgz files in /etc/apps
 
-# Unpack downloaded tgz files in /etc/apps
+	cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
 
-cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
+	echo "${timestamp} - 6/17 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
 
-echo "${timestamp} - 6/19 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
+	# Delete retrieved Apps and Add-ons
 
-# Delete retrieved Apps and Add-ons
+	rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
 
-rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
+	echo "${timestamp} - 7/17 - Removed Apps & Add-ons from source directory"
+	
+fi
 
-echo "${timestamp} - 7/19 - Removed Apps & Add-ons from source directory"
+# If variable retrieve_s3_data is not set to "yes", proceed
+
+if [ "$retrieve_s3_data" != "yes" ]; then
+
+	echo "${timestamp} - 5-7/17 - Choice was made to not retrieve files from AWS"
+	
+fi
 
 # Create directories for the 'user_data_no_popup_app' that will be configured through the script 
 
@@ -107,7 +124,7 @@ mkdir --parents "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local "${SPLUNK
   echo "BREAK_ONLY_BEFORE = ^Cloud-init|^[A-Za-z]{3}\,\s\d{1,2}\s[A-Za-z]{3}\s\d{4}\s\d{2}\:\d{2}\:\d{2}"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/props.conf
 
-echo "${timestamp} - 8/19 - Configured monitoring for User Data logs"
+echo "${timestamp} - 8/17 - Configured monitoring for User Data logs"
 
 # Prevent Splunk Web from checking for newer versions
 
@@ -146,59 +163,44 @@ echo "${timestamp} - 8/19 - Configured monitoring for User Data logs"
   echo "viewed = 1"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/ui-tour.conf
 
-echo "${timestamp} - 9/19 - Set some configurations to avoid popups"
-
-# Redirect Splunk Web port 8000 to port 80 to reach it only with IP address through Web browser
-
-iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8000
-
-echo "${timestamp} - 10/19 - Redirected port 8000 to port 80"
+echo "${timestamp} - 9/17 - Set some configurations to avoid popups"
 
 # Fake a previous login to prevent Splunk from requesting password change
 
 touch "${SPLUNK_HOME}"/etc/.ui_login
 
-echo "${timestamp} - 11/19 - Faked a previous UI login"
+echo "${timestamp} - 10/17 - Faked a previous UI login"
 
 # Set Splunk to start the service as the user 'ec2-user' 
 
 echo "SPLUNK_OS_USER=ec2-user" >> "${SPLUNK_HOME}"/etc/splunk-launch.conf
 
-echo "${timestamp} - 12/19 - Set ec2-user as the user to start the Splunk service with"
+echo "${timestamp} - 11/17 - Set ec2-user as the user to start the Splunk service with"
 
 # Change the ownership of the Splunk directory to the ec2-user
 
 chown -R ec2-user:ec2-user "${SPLUNK_HOME}"
 
-echo "${timestamp} - 13/19 - Changed ${SPLUNK_HOME} ownership to ec2-user"
+echo "${timestamp} - 12/17 - Changed ${SPLUNK_HOME} ownership to ec2-user"
 
 # Start Splunk, accept license and set a admin password
 
 sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd "${password}"'
 
-echo "${timestamp} - 14/19 - Set Splunk admin password"
+echo "${timestamp} - 13/17 - Set Splunk admin password"
 
-echo "${timestamp} - 15/19 - Accepted Splunk license"
+echo "${timestamp} - 14/17 - Accepted Splunk license"
 
-echo "${timestamp} - 16/19 - Started Splunk"
-
-# List installed Apps
-
-echo "${timestamp} - Installed Apps:"
-
-sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk display app -auth admin:"${password}"'
-
-echo "${timestamp} - 17/19 - Listed installed Apps"
-
-# Configure Splunk to start at boot time
-# Looking for an handy workaround since this big change: https://docs.splunk.com/Documentation/Splunk/7.2.2/Admin/RunSplunkassystemdservice
-
-# echo "${timestamp} - 18/19 - Configured Splunk to start at boot time"
-
-# "${SPLUNK_HOME}"/bin/splunk enable boot-start -user ec2-user
+echo "${timestamp} - 15/17 - Started Splunk"
 
 # Perform system update
 
 yum --setopt=deltarpm=0 update --quiet --assumeyes
 
-echo "${timestamp} - 19/19 - Performed a system update"
+echo "${timestamp} - 16/17 - Performed a system update"
+
+# List installed Apps
+
+echo "${timestamp} - 17/17 - Installed Apps list:"
+
+sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk display app -auth admin:"${password}"'
