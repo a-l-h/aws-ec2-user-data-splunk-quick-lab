@@ -26,7 +26,7 @@ readonly retrieve_s3_data="<yes|no>"
 readonly s3_bucket="<s3_bucket>"
 
 # Provide the Splunk admin password you want to set
-export password="yolo"
+export password="<password>"
 
 # Set $timestamp variable for logging
 timestamp=$(date '+%a, %d %b %Y %H:%M:%S %z')
