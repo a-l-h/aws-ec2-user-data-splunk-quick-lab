@@ -38,7 +38,6 @@ export SPLUNK_HOME="/opt/splunk"
 export SPLUNK_HOME="/opt/splunk"
 
 # Download the latest Splunk version
-
 wget --quiet --output-document splunk-latest-linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=latest&product=splunk&filename=.tgz&wget=true'
 
 echo "${timestamp} - 1/17 - Downloaded latest Splunk build"
