@@ -43,13 +43,11 @@ wget --quiet --output-document splunk-latest-linux-x86_64.tgz 'https://www.splun
 echo "${timestamp} - 1/17 - Downloaded latest Splunk build"
 
 # Unpack Splunk tgz file in /opt
-
 tar --extract --gzip --file splunk-latest-linux-x86_64.tgz --directory /opt
 
 echo "${timestamp} - 2/17 - Extracted Splunk to /opt/"
 
 # Delete Splunk tgz file
-
 rm --recursive --force splunk-latest-linux-x86_64.tgz
 
 echo "${timestamp} - 3/17 - Removed Splunk installation source"
