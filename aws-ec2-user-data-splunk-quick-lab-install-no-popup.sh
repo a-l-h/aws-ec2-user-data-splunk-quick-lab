@@ -67,32 +67,32 @@ echo "${timestamp} - 4/17 - Configured global bash prompt"
 
 if [ "$retrieve_s3_data" = "yes" ]; then
 
-   # Download Splunk Apps and Add-ons from S3 bucket
-   
-   aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz" --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
-   
-   echo "${timestamp} - 5/17 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
-   
-   # Unpack downloaded tgz files in /etc/apps
+# Download Splunk Apps and Add-ons from S3 bucket
 
-	cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
+aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz" --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
 
-	echo "${timestamp} - 6/17 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
+echo "${timestamp} - 5/17 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
 
-	# Delete retrieved Apps and Add-ons
+# Unpack downloaded tgz files in /etc/apps
 
-	rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
+cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
 
-	echo "${timestamp} - 7/17 - Removed Apps & Add-ons from source directory"
-	
+echo "${timestamp} - 6/17 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
+
+# Delete retrieved Apps and Add-ons
+
+rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
+
+echo "${timestamp} - 7/17 - Removed Apps & Add-ons from source directory"
+
 fi
 
 # If variable retrieve_s3_data is not set to "yes", proceed
 
 if [ "$retrieve_s3_data" != "yes" ]; then
 
-	echo "${timestamp} - 5-7/17 - Choice was made to not retrieve files from AWS"
-	
+echo "${timestamp} - 5-7/17 - Choice was made to not retrieve files from AWS"
+
 fi
 
 # Create directories for the 'user_data_no_popup_app' that will be configured through the script 
