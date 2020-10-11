@@ -37,17 +37,17 @@ export SPLUNK_HOME="/opt/splunk"
 # Download the latest Splunk version
 wget --quiet --output-document splunk-latest-linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=latest&product=splunk&filename=.tgz&wget=true'
 
-echo "${timestamp} - 1/21 - Downloaded latest Splunk build"
+echo "${timestamp} - 1/20 - Downloaded latest Splunk build"
 
 # Unpack Splunk tgz file in /opt
 tar --extract --gzip --file splunk-latest-linux-x86_64.tgz --directory /opt
 
-echo "${timestamp} - 2/21 - Extracted Splunk to /opt/"
+echo "${timestamp} - 2/20 - Extracted Splunk to /opt/"
 
 # Delete Splunk tgz file
 rm --recursive --force splunk-latest-linux-x86_64.tgz
 
-echo "${timestamp} - 3/21 - Removed Splunk installation source"
+echo "${timestamp} - 3/20 - Removed Splunk installation source"
 
 # Customize global bash prompt with color, shortcut for $SPLUNK_HOME/bin directory, and auto-completion script so it can be used by both root and ec2-user users
 
@@ -58,7 +58,7 @@ echo "${timestamp} - 3/21 - Removed Splunk installation source"
   echo ". \${SPLUNK_HOME}/share/splunk/cli-command-completion.sh"
 } >> /etc/bashrc
 
-echo "${timestamp} - 4/21 - Configured global bash prompt"
+echo "${timestamp} - 4/20 - Configured global bash prompt"
 
 # If variable retrieve_s3_data is set to "true", proceed
 
@@ -68,19 +68,19 @@ if [ "$retrieve_s3_data" = "true" ]; then
 
 aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz" --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
 
-echo "${timestamp} - 5/21 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
+echo "${timestamp} - 5/20 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
 
 # Unpack downloaded tgz files in /etc/apps
 
 cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
 
-echo "${timestamp} - 6/21 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
+echo "${timestamp} - 6/20 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
 
 # Delete retrieved Apps and Add-ons
 
 rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
 
-echo "${timestamp} - 7/21 - Removed Apps & Add-ons from source directory"
+echo "${timestamp} - 7/20 - Removed Apps & Add-ons from source directory"
 
 fi
 
@@ -88,7 +88,7 @@ fi
 
 if [ "$retrieve_s3_data" = "false" ]; then
 
-echo "${timestamp} - 5-7/21 - Choice was made to not retrieve files from AWS"
+echo "${timestamp} - 5-7/20 - Choice was made to not retrieve files from AWS"
 
 fi
 
@@ -118,7 +118,7 @@ mkdir --parents "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local "${SPLUNK
   echo "BREAK_ONLY_BEFORE = ^Cloud-init|^[A-Za-z]{3}\,\s\d{1,2}\s[A-Za-z]{3}\s\d{4}\s\d{2}\:\d{2}\:\d{2}"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/props.conf
 
-echo "${timestamp} - 8/21 - Configured monitoring for User Data logs"
+echo "${timestamp} - 8/20 - Configured monitoring for User Data logs"
 
 # Prevent Splunk Web from checking for newer versions
 
@@ -135,7 +135,6 @@ echo "${timestamp} - 8/21 - Configured monitoring for User Data logs"
   echo "dismissedInstrumentationOptInVersion = 4" 
   echo "hideInstrumentationOptInModal = 1"
   echo "notification_python_3_impact = false"
-  echo "search_syntax_highlighting = dark"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/user-prefs.conf
 
 # Configure password policy to allow a password shorter than the default minimum of 8 characters
@@ -159,68 +158,62 @@ echo "${timestamp} - 8/21 - Configured monitoring for User Data logs"
   echo "viewed = 1"
 } > "${SPLUNK_HOME}"/etc/apps/user_data_no_popup_app/local/ui-tour.conf
 
-echo "${timestamp} - 9/21 - Set some configurations to avoid popups"
+echo "${timestamp} - 9/20 - Set some configurations to avoid popups"
 
 # Fake a previous login to prevent Splunk from requesting password change
 
 touch "${SPLUNK_HOME}"/etc/.ui_login
 
-echo "${timestamp} - 10/21 - Faked a previous UI login"
+echo "${timestamp} - 10/20 - Faked a previous UI login"
 
 # Change the ownership of the Splunk directory to the ec2-user
 
 chown -R ec2-user:ec2-user "${SPLUNK_HOME}"
 
-echo "${timestamp} - 11/21 - Changed ${SPLUNK_HOME} ownership to ec2-user"
+echo "${timestamp} - 11/20 - Changed ${SPLUNK_HOME} ownership to ec2-user"
 
 # Start Splunk, accept license and set a admin password
 
+echo "${timestamp} - 12/20 - Set Splunk admin password"
+
+echo "${timestamp} - 13/20 - Accepted Splunk license"
+
+echo "${timestamp} - 14/20 - Started Splunk"
+
 sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd "${password}"'
-
-echo "${timestamp} - 12/21 - Set Splunk admin password"
-
-echo "${timestamp} - 13/21 - Accepted Splunk license"
-
-echo "${timestamp} - 14/21 - Started Splunk"
 
 # Configure Splunk to start at boot time
 
-sudo "${SPLUNK_HOME}"/bin/splunk enable boot-start -systemd-managed 0 -user ec2-user
+echo "${timestamp} - 15/20 - Set Splunk to start at boot time"
 
-echo "${timestamp} - 15/21 - Set Splunk to start at boot time"
+sudo "${SPLUNK_HOME}"/bin/splunk enable boot-start -systemd-managed 0 -user ec2-user
 
 # Install iptables-services
 
-yum --setopt=deltarpm=0 install iptables-services --quiet --assumeyes
+sudo yum --setopt=deltarpm=0 install iptables-services --quiet --assumeyes
 
-echo "${timestamp} - 16/21 - Installed iptables-services"
+echo "${timestamp} - 16/20 - Installed iptables-services"
 
 # Redirect port 80 to port 8000 using iptables
 
 sudo iptables --table nat --append PREROUTING --protocol tcp --dport 80 --jump REDIRECT --to-port 8000
 
-echo "${timestamp} - 17/21 - Redirected port 80 to port 8000 using iptables"
+echo "${timestamp} - 17/20 - Redirected port 80 to port 8000 using iptables"
 
 # Save iptables configuration to make it persistent
 
-sudo service iptables save
+echo "${timestamp} - 18/20 - Saved iptables configuration to make it persistent"
 
-echo "${timestamp} - 18/21 - Saved iptables configuration to make it persistent"
+sudo service iptables save
 
 # Enable iptables-services at boot time
 
+echo "${timestamp} - 19/20 - Enabled iptables-services at boot time"
+
 sudo systemctl enable iptables
-
-echo "${timestamp} - 19/21 - Enabled iptables-services at boot time"
-
-# Perform system update
-
-yum --setopt=deltarpm=0 update --quiet --assumeyes
-
-echo "${timestamp} - 20/21 - Performed a system update"
 
 # List installed Apps
 
-echo "${timestamp} - 21/21 - Installed Apps list:"
+echo "${timestamp} - 20/20 - Installed Apps list:"
 
 sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk display app -auth admin:"${password}"'
