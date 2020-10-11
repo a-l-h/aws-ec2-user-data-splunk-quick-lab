@@ -20,9 +20,9 @@ set -o pipefail
 set -o nounset
 
 # Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket
-readonly retrieve_s3_data="<yes|no>"
+readonly retrieve_s3_data="false"
 
-# If the retrieve_s3_data is set to "yes", provide the name of the bucket you want to retrieve files from
+# If the retrieve_s3_data is set to "true", provide the name of the bucket you want to retrieve files from
 readonly s3_bucket="<s3_bucket>"
 
 # Provide the Splunk admin password you want to set
@@ -60,9 +60,9 @@ echo "${timestamp} - 3/21 - Removed Splunk installation source"
 
 echo "${timestamp} - 4/21 - Configured global bash prompt"
 
-# If variable retrieve_s3_data is set to "yes", proceed
+# If variable retrieve_s3_data is set to "true", proceed
 
-if [ "$retrieve_s3_data" = "yes" ]; then
+if [ "$retrieve_s3_data" = "true" ]; then
 
 # Download Splunk Apps and Add-ons from S3 bucket
 
@@ -84,9 +84,9 @@ echo "${timestamp} - 7/21 - Removed Apps & Add-ons from source directory"
 
 fi
 
-# If variable retrieve_s3_data is not set to "yes", proceed
+# If variable retrieve_s3_data is set to "false", proceed
 
-if [ "$retrieve_s3_data" != "yes" ]; then
+if [ "$retrieve_s3_data" = "false" ]; then
 
 echo "${timestamp} - 5-7/21 - Choice was made to not retrieve files from AWS"
 
