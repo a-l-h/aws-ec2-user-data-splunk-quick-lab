@@ -64,23 +64,23 @@ echo "${timestamp} - 4/20 - Configured global bash prompt"
 
 if [ "$retrieve_s3_data" = "true" ]; then
 
-# Download Splunk Apps and Add-ons from S3 bucket
+	# Download Splunk Apps and Add-ons from S3 bucket
 
-aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz" --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
+	aws s3 cp s3://"${s3_bucket}"/ ./ --quiet --recursive --exclude "*" --include "*.tgz" --include "*.tar.gz" --include "*.spl" --include "*.zip" || true
 
-echo "${timestamp} - 5/20 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
+	echo "${timestamp} - 5/20 - Downloaded Apps & Add-ons from s3 bucket ${s3_bucket}"
 
-# Unpack downloaded tgz files in /etc/apps
+	# Unpack downloaded tgz files in /etc/apps
 
-cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
+	cat ./*.tgz | tar --extract --gzip --file - --ignore-zeros --directory "${SPLUNK_HOME}"/etc/apps || true
 
-echo "${timestamp} - 6/20 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
+	echo "${timestamp} - 6/20 - Extracted Apps & Add-ons to ${SPLUNK_HOME}/etc/apps"
 
-# Delete retrieved Apps and Add-ons
+	# Delete retrieved Apps and Add-ons
 
-rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
+	rm --recursive --force ./*.tgz ./*.tar.gz ./*.spl ./*.zip
 
-echo "${timestamp} - 7/20 - Removed Apps & Add-ons from source directory"
+	echo "${timestamp} - 7/20 - Removed Apps & Add-ons from source directory"
 
 fi
 
@@ -88,7 +88,7 @@ fi
 
 if [ "$retrieve_s3_data" = "false" ]; then
 
-echo "${timestamp} - 5-7/20 - Choice was made to not retrieve files from AWS"
+	echo "${timestamp} - 5-7/20 - Choice was made to not retrieve files from AWS"
 
 fi
 
