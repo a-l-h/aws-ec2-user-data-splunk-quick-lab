@@ -195,7 +195,7 @@ yum --setopt=deltarpm=0 install iptables-services --quiet --assumeyes
 
 echo "${timestamp} - 16/21 - Installed iptables-services"
 
-# Redirect port 443 to port 8000 using iptables
+# Redirect port 80 to port 8000 using iptables
 
 sudo iptables --table nat --append PREROUTING --protocol tcp --dport 80 --jump REDIRECT --to-port 8000
 
