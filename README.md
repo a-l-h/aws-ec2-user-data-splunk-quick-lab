@@ -4,7 +4,7 @@ This is a simple shell script to use as "User Data" when launching an AWS EC2 in
 
 It will install Splunk and perform a few configuration steps so that Splunk is accessible straight away without any of the actions usually required with a fresh install.
 
-It will also retrieve Splunk Apps and Add-ons from a provided S3 bucket and install them in the dedicated Splunk directory.
+It will also retrieve Splunk Apps and Add-ons from a provided S3 bucket and install them.
 
 The goal is to set up a throwable Splunk instance for Lab purposes without any dialog box to interfere.
 
@@ -12,16 +12,14 @@ The goal is to set up a throwable Splunk instance for Lab purposes without any d
 
 To use this script as "User Data" with an EC2 instance, please consider the prerequisites below.
 
-#### Choose if you want to retrieve files from an S3 bucket or not
+#### If you want to retrieve files from an S3 bucket
 
-Set variable 'retrieve_s3_data' to yes or no:
+Set variable 'retrieve_s3_data' to true:
 
 ```
 # Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket
-readonly retrieve_s3_data="<yes|no>"
+readonly retrieve_s3_data="true"
 ```
-
-#### If yes, provide the name of your S3 bucket
 
 Set 's3_bucket' variable to the name of your S3 bucket:
 
@@ -51,7 +49,7 @@ Finally, the created role should be assigned to your EC2 instance.
 
 #### Make sure your EC2 instance is reachable
 
-Configure and assign a security group that will allow access to your EC2 instance on TCP ports 8000 & 22.
+Configure and assign a security group that will allow access to your EC2 instance on TCP ports 80 & 22.
 
 #### Notes
 
@@ -59,18 +57,16 @@ Configure and assign a security group that will allow access to your EC2 instanc
 
 The output of the User Data script is written in /var/log/cloud-init-output.log.
 
-The script configures Splunk to monitor this log file and index it in the '_internal' index under the 'aws:cloud-init' sourcetype so that data could be explored from Splunk.
+The script configures Splunk to monitor this log file and index it in the internal index under the 'aws:cloud-init' sourcetype so that data could be explored from Splunk.
 
 ### Splunk is run with ec2-user
 
 This could be important to know while accessing the instance via ssh.
 
-### Access Splunk on port 8000
+### Access Splunk Web on port 80
 
-Splunk default Web port is 8000. It has been left as-is to avoid messing with iptables.
+Splunk default Web port is 8000 but iptables has been configured to redirect port 80 to port 8000, and the rule has been made persistent.
 
 ### Splunk behavior on boot
 
-Since a major change in version 7.2.2 (https://splk.it/2TeoAh7), enabling boot-start the way it was done in the script caused unexpected issues.
-
-Hence, Splunk has not been configured to start at boot. I am looking for a viable solution.
+Splunk has been configured to start at boot time.
