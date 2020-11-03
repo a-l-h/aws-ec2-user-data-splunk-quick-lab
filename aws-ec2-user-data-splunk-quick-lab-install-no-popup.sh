@@ -88,7 +88,7 @@ fi
 
 if [ "$retrieve_s3_data" = "false" ]; then
 
-	echo "${timestamp} - 5-7/20 - Choice was made to not retrieve files from AWS"
+	echo "${timestamp} - 5-7/20 - Choice was made to not retrieve files from S3"
 
 fi
 
