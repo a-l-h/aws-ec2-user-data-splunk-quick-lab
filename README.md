@@ -26,7 +26,7 @@ export password="<password>"
 1. Set `retrieve_s3_data` variable to true 
 
 ```shell
-# Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket
+# Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket?
 readonly retrieve_s3_data="true"
 ```
 
