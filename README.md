@@ -1,4 +1,4 @@
-# AWS EC2 User Data script to launch a quick Splunk lab
+# ![](logo.svg) AWS EC2 User Data script to launch a quick Splunk lab
 
 This is a simple shell script to use as 'User Data' when launching an Amazon Linux AMI based EC2 instance serving as a Splunk quick Lab.
 
