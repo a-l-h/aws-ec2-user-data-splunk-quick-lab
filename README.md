@@ -68,7 +68,7 @@ Launch an Amazon Linux 2 AMI based EC2.
 
 ### Access Splunk Web
 
-When your EC2 instance is launched, you should be able to access Splunk Web from your browser
+When your EC2 instance is launched, access Splunk from your browser
 
 ```
 http://<EC2 Public IP | Public DNS>
