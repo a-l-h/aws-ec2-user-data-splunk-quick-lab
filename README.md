@@ -16,7 +16,7 @@ The goal is to set up a throwable Splunk instance for lab purposes without any d
 
 Set `password` variable
 
-```
+```shell
 # Provide the Splunk admin password you want to set
 export password="<password>"
 ```
@@ -25,14 +25,14 @@ export password="<password>"
 
 1. Set `retrieve_s3_data` variable to true 
 
-```
+```shell
 # Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket
 readonly retrieve_s3_data="true"
 ```
 
 2. Set `s3_bucket` variable to the name of your S3 bucket
 
-```
+```shell
 # Provide the name of the bucket you want to retrieve Splunk Apps and Add-ons from
 readonly s3_bucket="<s3_bucket>"
 ```
