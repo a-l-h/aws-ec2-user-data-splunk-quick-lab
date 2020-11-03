@@ -66,7 +66,7 @@ Launch an Amazon Linux 2 AMI based EC2.
 4. Configure Security Group - Assign the Security Group allowing HTTP & SSH
 5. Launch - Pick the right key pair
 
-### Access Splunk Web
+### Access Splunk
 
 When your EC2 instance is launched, access Splunk from your browser
 
@@ -80,9 +80,7 @@ http://<EC2 Public IP | Public DNS>
 
 Note that Splunk runs as ``ec2-user``.
 
-#### Notes
-
-### Indexing cloud-init output
+### Browse cloud-init output
 
 The output of the User Data script is written in /var/log/cloud-init-output.log.
 
@@ -92,6 +90,6 @@ The script configures Splunk to monitor this log file and index it in the intern
 index="_internal" sourcetype="aws:cloud-init" | reverse
 ```
 
-### Splunk behavior on boot
+### Access Splunk after a reboot
 
 Splunk is configured to start at boot time. Hence, whenever you start your instance, Splunk starts.
