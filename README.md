@@ -17,7 +17,7 @@ The goal is to set up a throwable Splunk instance for lab purposes without any d
 Set `password` variable
 
 ```
-# Provide the admin password you want to set
+# Provide the Splunk admin password you want to set
 export password="<password>"
 ```
 
