@@ -78,7 +78,7 @@ The output of the User Data script is written in /var/log/cloud-init-output.log.
 The script configures Splunk to monitor this log file and index it in the internal index under the 'aws:cloud-init' sourcetype so that data could be explored from Splunk if needed:
 
 ```
-index="_internal" sourcetype="aws:cloud-init"
+index="_internal" sourcetype="aws:cloud-init" | reverse
 ```
 
 ### Splunk behavior on boot
