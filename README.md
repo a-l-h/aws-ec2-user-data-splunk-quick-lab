@@ -78,7 +78,7 @@ http://<EC2 Public IP | Public DNS>
 
 [Connect to your EC2 via SSH](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
 
-Not that Splunk runs as ``ec2-user``.
+Note that Splunk runs as ``ec2-user``.
 
 #### Notes
 
