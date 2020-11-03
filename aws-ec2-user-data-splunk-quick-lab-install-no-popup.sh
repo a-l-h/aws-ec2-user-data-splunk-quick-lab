@@ -19,14 +19,14 @@ set -o pipefail
 # Set the script to exit when it tries to use undeclared variables
 set -o nounset
 
+# Provide the Splunk admin password you want to set
+export password="<password>"
+
 # Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket
 readonly retrieve_s3_data="false"
 
 # If the retrieve_s3_data is set to "true", provide the name of the bucket you want to retrieve files from
 readonly s3_bucket="<s3_bucket>"
-
-# Provide the Splunk admin password you want to set
-export password="<password>"
 
 # Set $timestamp variable for logging
 timestamp=$(date '+%a, %d %b %Y %H:%M:%S %z')
