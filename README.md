@@ -39,6 +39,8 @@ readonly s3_bucket="<s3_bucket>"
 
 ### Adjust the AWS side
 
+Launch an AWS EC2 based on Amazon Linux 2 AMI.
+
 #### Make sure your EC2 instance is reachable
 
 1. [Configure a security group to allow inbound HTTP and SSH traffic](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html#add-rule-authorize-access).
@@ -54,6 +56,19 @@ readonly s3_bucket="<s3_bucket>"
 ### Copy the script in the User data field
 
 [Copy the modified script in the User data field when launching an instance from the Launch Instance Wizard](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-console).
+
+**Launch EC2 quick steps**
+
+1. Launch instance
+- Pick an 'Amazon Linux 2' AMI
+2. Configure instance details
+- [Optional] Specify IAM role if you are retrieving data from S3
+- Copy script in User data field
+3. [Optional] Add tags
+4. Configure Security Group
+- Assign the Security Group allowing HTTP & SSH
+5. Launch
+- Pick the right key pair
 
 ### Access Splunk Web
 
