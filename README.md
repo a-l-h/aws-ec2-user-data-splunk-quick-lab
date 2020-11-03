@@ -60,7 +60,7 @@ readonly s3_bucket="<s3_bucket>"
 When your EC2 instance is launched, you should be able to access Splunk Web from your browser
 
 ```
-http://<aws ec2 instance ip>
+http://<EC2 Public IP | Public DNS>
 ```
 
 ### SSH Access
