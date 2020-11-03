@@ -59,16 +59,12 @@ Launch an AWS EC2 based on Amazon Linux 2 AMI.
 
 **Launch EC2 quick steps**
 
-1. Launch instance
-- Pick an 'Amazon Linux 2' AMI
-2. Configure instance details
-- [Optional] Specify IAM role if you are retrieving data from S3
-- Copy script in User data field
+1. Launch instance - Pick an 'Amazon Linux 2' AMI
+2. [Optional] Configure instance details - Specify IAM role if you are retrieving data from S3
+2. Configure instance details - Copy script in User data field
 3. [Optional] Add tags
-4. Configure Security Group
-- Assign the Security Group allowing HTTP & SSH
-5. Launch
-- Pick the right key pair
+4. Configure Security Group - Assign the Security Group allowing HTTP & SSH
+5. Launch - Pick the right key pair
 
 ### Access Splunk Web
 
