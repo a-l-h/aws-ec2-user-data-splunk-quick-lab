@@ -22,7 +22,7 @@ set -o nounset
 # Provide the Splunk admin password you want to set
 export password="<password>"
 
-# Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket
+# Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket?
 readonly retrieve_s3_data="false"
 
 # If the retrieve_s3_data is set to "true", provide the name of the bucket you want to retrieve files from
@@ -186,17 +186,17 @@ sudo -E -u ec2-user bash -c '${SPLUNK_HOME}/bin/splunk start --accept-license --
 
 echo "${timestamp} - 15/20 - Set Splunk to start at boot time"
 
-sudo "${SPLUNK_HOME}"/bin/splunk enable boot-start -systemd-managed 0 -user ec2-user
+"${SPLUNK_HOME}"/bin/splunk enable boot-start -user ec2-user
 
 # Install iptables-services
 
-sudo yum --setopt=deltarpm=0 install iptables-services --quiet --assumeyes
+yum --setopt=deltarpm=0 install iptables-services --quiet --assumeyes
 
 echo "${timestamp} - 16/20 - Installed iptables-services"
 
 # Redirect port 80 to port 8000 using iptables
 
-sudo iptables --table nat --append PREROUTING --protocol tcp --dport 80 --jump REDIRECT --to-port 8000
+iptables --table nat --append PREROUTING --protocol tcp --dport 80 --jump REDIRECT --to-port 8000
 
 echo "${timestamp} - 17/20 - Redirected port 80 to port 8000 using iptables"
 
@@ -204,13 +204,13 @@ echo "${timestamp} - 17/20 - Redirected port 80 to port 8000 using iptables"
 
 echo "${timestamp} - 18/20 - Saved iptables configuration to make it persistent"
 
-sudo service iptables save
+service iptables save
 
 # Enable iptables-services at boot time
 
 echo "${timestamp} - 19/20 - Enabled iptables-services at boot time"
 
-sudo systemctl enable iptables
+systemctl enable iptables
 
 # List installed Apps
 
