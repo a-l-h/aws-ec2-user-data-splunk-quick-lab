@@ -14,7 +14,7 @@ The goal is to set up a throwable Splunk instance for lab purposes without any d
 
 #### Define a password for Splunk admin account
 
-Set `password` variable to the desired password
+Set `password` variable
 
 ```
 # Provide the admin password you want to set
