@@ -57,7 +57,7 @@ Launch an Amazon Linux 2 AMI based EC2.
 
 [Copy the modified script in the User data field when launching an instance from the Launch Instance Wizard](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-console).
 
-**Launch EC2 quick steps**
+**Quick steps summary**
 
 1. Launch instance - Pick an 'Amazon Linux 2' AMI
 2. [Optional] Configure instance details - Specify IAM role if you are retrieving data from S3
