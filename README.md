@@ -82,9 +82,7 @@ Note that Splunk runs as ``ec2-user``.
 
 ### Browse cloud-init output
 
-The output of the User Data script is written in /var/log/cloud-init-output.log.
-
-The script configures Splunk to monitor this log file and index it in the internal index under the 'aws:cloud-init' sourcetype so that data could be explored from Splunk if needed:
+The script configures Splunk to monitor the output of the User Data script so it can be explored from Splunk if needed:
 
 ```
 index="_internal" sourcetype="aws:cloud-init" | reverse
