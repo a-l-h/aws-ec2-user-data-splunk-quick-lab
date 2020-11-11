@@ -38,7 +38,7 @@ readonly splunk_com_login="<login>"
 readonly splunk_com_password="<password>"
 ```
 
-3. Provide the id and version of each Splunkbase App or Add-on
+3. Provide the id and version of each App or Add-on you want to download from Splunkbase
 
 ```shell
 # Provide the id and version of each App or Add-on you want to download from Splunkbase
