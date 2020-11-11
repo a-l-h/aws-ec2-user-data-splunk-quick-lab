@@ -45,7 +45,7 @@ readonly splunk_com_password="<password>"
 readonly splunkbase_apps=("<app_id> <app_version>" "<app_id> <app_version>")
 ```
 
-> **_NOTE:_**  The id of an App or Add-on can be found in its Splunkbase URL (https://splunkbase.splunk.com/app/<app_id>/).
+> **_Note:_**  Get the id from the URL ``https://splunkbase.splunk.com/app/<app_id>/``.
 
 #### If you want to retrieve files from an S3 bucket
 
