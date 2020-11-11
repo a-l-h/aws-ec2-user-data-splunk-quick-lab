@@ -4,7 +4,7 @@ This is a simple shell script to use as 'User Data' when launching an Amazon Lin
 
 It will install Splunk and perform a few configuration steps so that Splunk is accessible straight away without any of the actions usually required with a fresh install.
 
-It will also retrieve Splunk Apps and Add-ons from a provided S3 bucket and install them.
+It will also download Splunk Apps and Add-ons either from Splunkbase or from a provided S3 bucket and install them.
 
 The goal is to set up a throwable Splunk instance for lab purposes without any dialog box to interfere.
 
@@ -21,12 +21,36 @@ Set `password` variable
 export password="<password>"
 ```
 
+#### If you want to download Apps & Add-ons from Splunkbase
+
+1. Set `download_splunkbase` variable to true 
+
+```shell
+# Set to true if you need to download Splunk Apps & Add-ons from Splunkbase
+readonly download_splunkbase="false"
+```
+
+2. Set Splunk.com credentials
+
+```shell
+# Provide Splunk credentials (could be a junk account)
+readonly splunk_com_login="<login>"
+readonly splunk_com_password="<password>"
+```
+
+3. Provide the id and version of each Splunkbase App or Add-on
+
+```shell
+# Provide the id and version of each App or Add-on you want to download from Splunkbase
+readonly splunkbase_apps=("<app_id> <app_version>" "<app_id> <app_version>")
+```
+
 #### If you want to retrieve files from an S3 bucket
 
 1. Set `retrieve_s3_data` variable to true 
 
 ```shell
-# Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket?
+# Set to true if you need to retrieve Splunk Apps & Add-ons for an S3 bucket?
 readonly retrieve_s3_data="true"
 ```
 
