@@ -22,7 +22,7 @@ set -o nounset
 # Provide the Splunk admin password you want to set
 export password="<password>"
 
-# Do you need to retrieve Splunk Apps & Add-ons for an S3 bucket?
+# Do you need to retrieve Splunk Apps & Add-ons from an S3 bucket?
 readonly retrieve_s3_data="false"
 
 # If the retrieve_s3_data is set to "true", provide the name of the bucket you want to retrieve files from
