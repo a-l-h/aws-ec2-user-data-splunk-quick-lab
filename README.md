@@ -38,14 +38,14 @@ readonly splunk_com_login="<login>"
 readonly splunk_com_password="<password>"
 ```
 
-3. Provide the id and version of each App or Add-on you want to download from Splunkbase
+3. Provide the ID and version of each App or Add-on you want to download from Splunkbase
 
 ```shell
 # Provide the id and version of each App or Add-on you want to download from Splunkbase
 readonly splunkbase_apps=("<app_id> <app_version>" "<app_id> <app_version>")
 ```
 
-> **_Note:_**  Get the id from the URL ``https://splunkbase.splunk.com/app/<app_id>/``.
+> **_Note:_**  Get an App or Add-on's ID from its Splunkase URL ``https://splunkbase.splunk.com/app/<app_id>/``.
 
 #### If you want to retrieve files from an S3 bucket
 
