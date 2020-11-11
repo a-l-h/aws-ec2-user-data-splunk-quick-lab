@@ -24,13 +24,12 @@ readonly download_splunkbase="false"
 #
 # If the download_splunkbase is set to "true", then
 
-	# Provide splunk credentials (use a junk account)
-	readonly splunkbase_login="<login>"
-	readonly splunkbase_password="<password>"
+	# Provide Splunk credentials (could be a junk account)
+	readonly splunk_com_login="<login>"
+	readonly splunk_com_password="<password>"
 
 	# Provide the id and version of each App or Add-on you want to download from Splunkbase
 	readonly splunkbase_apps=("<app_id> <app_version>" "<app_id> <app_version>")
-	# Example splunkbase_apps=("<app_x_id> <app_x_version>" "<app_y_id> <app_y_version>") 
 
 ### AWS S3 VARIABLES
 
@@ -109,7 +108,7 @@ if [ "$download_splunkbase" = "true" ]; then
 
 	# Aunthenticate to Splunkbase and save sid and ssoid
 
-	readonly sid_and_ssoid="$(exec ./splunkbase-download/splunkbase-download.sh authenticate "${splunkbase_login}" "${splunkbase_password}" | grep 'sid\|SSOID' | cut -f3 | xargs -n2)"
+	readonly sid_and_ssoid="$(exec ./splunkbase-download/splunkbase-download.sh authenticate "${splunk_com_login}" "${splunk_com_password}" | grep 'sid\|SSOID' | cut -f3 | xargs -n2)"
 
 	echo "${timestamp} - Aunthenticated to Splunkbase and saved sid and ssoid"
 
