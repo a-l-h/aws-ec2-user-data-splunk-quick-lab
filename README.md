@@ -45,12 +45,7 @@ readonly splunk_com_password="<password>"
 readonly splunkbase_apps=("<app_id> <app_version>" "<app_id> <app_version>")
 ```
 
----
-**NOTE**
-
-It works with almost all markdown flavours (the below blank line matters).
-
----
+> **_NOTE:_**  The note content.
 
 #### If you want to retrieve files from an S3 bucket
 
