@@ -33,7 +33,7 @@ readonly download_splunkbase="false"
 2. Set Splunk.com credentials
 
 ```shell
-# Provide Splunk credentials (could be a junk account)
+# Provide Splunk.com credentials (could be a junk account)
 readonly splunk_com_login="<login>"
 readonly splunk_com_password="<password>"
 ```
