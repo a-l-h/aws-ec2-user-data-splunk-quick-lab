@@ -8,7 +8,7 @@
 
 # The goal is to set up a throwable Splunk instance for Lab purposes without any dialog box to interfere.
 
-# More info on github : https://github.com/d2si-spk/aws-ec2-user-data-splunk-quick-lab-install-no-popup
+# More info on github : https://github.com/a-l-h/aws-ec2-user-data-splunk-quick-lab
 
 ########## SET THESE VARIABLES ##########
 
