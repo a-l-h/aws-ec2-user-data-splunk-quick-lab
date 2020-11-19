@@ -117,3 +117,9 @@ index="_internal" sourcetype="aws:cloud-init" | reverse
 ### Access Splunk after a reboot
 
 Splunk is configured to start at boot time. Hence, whenever you start your instance, Splunk starts.
+
+### Notes
+
+Script uses Tyler James Frederic's [splunkbase-download project](https://github.com/tfrederick74656/splunkbase-download)
+
+
